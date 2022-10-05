@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const fs = require('fs');
+
 const genToken = require('../middleware/genToken');
 const { validEmail, validPassword } = require('../middleware/index');
 
