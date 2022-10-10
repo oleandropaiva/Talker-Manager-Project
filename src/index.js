@@ -3,7 +3,7 @@ const bodyParser = require('body-parser');
 const fs = require('fs');
 const genToken = require('../middleware/genToken');
 const { validEmail, validPassword, validAge,
-  validName, validToken, validTalk, validWatchedAt, validRate } = require('../middleware');
+  validName, validToken, validTalk, validWatchedAt, validRate } = require('../middleware/index');
 
 const app = express();
 app.use(bodyParser.json());
