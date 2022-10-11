@@ -55,7 +55,7 @@ app.delete('/talker/:id', validToken, (req, res) => {
   const { id } = req.params;
   const palestrantes = JSON.parse(fs.readFileSync(talkerJson, 'utf-8'));
   const filterTalkers = palestrantes.filter((talker) => talker.id !== Number(id));
-  fs.writeFileSync('./talker.json', JSON.stringify(filterTalkers));
+  fs.writeFileSync('./src/talker.json', JSON.stringify(filterTalkers));
 
   return res.status(204).json();
 });
@@ -63,11 +63,10 @@ app.delete('/talker/:id', validToken, (req, res) => {
 app.use(validToken, validAge, validName, validTalk, validWatchedAt, validRate);
 
 app.post('/talker', (req, res) => {
+console.log(validToken);
   const { age, name, talk } = req.body;
   const { watchedAt, rate } = talk;
-  const genId = 5;
   const talker = {
-    id: genId,
     name,
     age,
     talk: {
@@ -76,9 +75,10 @@ app.post('/talker', (req, res) => {
     },
   };
   const palestrantes = JSON.parse(fs.readFileSync(talkerJson, 'utf8'));
-  palestrantes.push(talker);
-  fs.writeFileSync('./talker.json', JSON.stringify(palestrantes));
-  return res.status(201).json(talker);
+  const newTalker = { ...talker, id: palestrantes.length + 1 };
+  palestrantes.push(newTalker);
+  fs.writeFileSync('./src/talker.json', JSON.stringify(palestrantes));
+  return res.status(201).json(newTalker);
 }); 
 
 app.put('/talker/:id', (req, res) => {
