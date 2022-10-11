@@ -10,7 +10,7 @@ app.use(bodyParser.json());
 
 const HTTP_OK_STATUS = 200;
 const PORT = '3000';
-const talkerJson = './talker.json';
+const talkerJson = './src/talker.json';
 // não remova esse endpoint, e para o avaliador funcionar
 app.get('/', (_request, response) => {
   response.status(HTTP_OK_STATUS).send();
@@ -39,12 +39,11 @@ app.get('/talker/:id', (req, res) => {
   );
 
   if (!talkerId) {
-  return res
+    return res
       .status(404)
-      .json({ message: 'Pessoa palestrante não encontrada' }); 
-}
-
-  return res.status(HTTP_OK_STATUS).json(talkerId);
+      .json({ message: 'Pessoa palestrante não encontrada' });
+  }
+    return res.status(HTTP_OK_STATUS).json(talkerId);
 });
 
 app.post('/login', validEmail, validPassword, (req, res) => {
@@ -76,19 +75,17 @@ app.post('/talker', (req, res) => {
       rate,
     },
   };
-  const palestrantes = JSON.parse(fs.readFileSync(talkerJson, 'utf-8'));
+  const palestrantes = JSON.parse(fs.readFileSync(talkerJson, 'utf8'));
   palestrantes.push(talker);
   fs.writeFileSync('./talker.json', JSON.stringify(palestrantes));
-
   return res.status(201).json(talker);
-});
+}); 
 
 app.put('/talker/:id', (req, res) => {
   const { age, name, talk } = req.body;
   const { watchedAt, rate } = talk;
   const { id } = req.params;
   const palestrantes = JSON.parse(fs.readFileSync(talkerJson, 'utf-8'));
-  // const findTalker = palestrantes.find((item) => item.id === id);
   palestrantes[Number(id) - 1] = {
     ...palestrantes[Number(id) - 1],
     id: Number(id),
@@ -103,6 +100,7 @@ app.put('/talker/:id', (req, res) => {
 
   return res.status(200).json(palestrantes[Number(id) - 1]);
 });
+
 app.listen(PORT, () => {
   console.log('Online');
 });
